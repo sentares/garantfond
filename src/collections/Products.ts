@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { passportBlocks } from './passportBlocks'
+import { revalidateContent } from '../lib/revalidate'
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -9,6 +10,10 @@ export const Products: CollectionConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [revalidateContent],
+    afterDelete: [revalidateContent],
   },
   admin: {
     useAsTitle: 'name',

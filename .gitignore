@@ -16,3 +16,8 @@
 *.pem
 npm-debug.log*
 .DS_Store
+tsconfig.tsbuildinfo
+
+# загруженные медиа (хранятся локально в dev; на проде — blob storage)
+/media/
+/public/media/

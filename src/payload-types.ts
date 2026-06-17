@@ -75,6 +75,8 @@ export interface Config {
     cities: City;
     news: News;
     stories: Story;
+    partners: Partner;
+    milestones: Milestone;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -90,6 +92,8 @@ export interface Config {
     cities: CitiesSelect<false> | CitiesSelect<true>;
     news: NewsSelect<false> | NewsSelect<true>;
     stories: StoriesSelect<false> | StoriesSelect<true>;
+    partners: PartnersSelect<false> | PartnersSelect<true>;
+    milestones: MilestonesSelect<false> | MilestonesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -99,8 +103,16 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('ru' | 'ky' | 'en') | ('ru' | 'ky' | 'en')[];
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    settings: Setting;
+    stats: Stat;
+    calculator: Calculator;
+  };
+  globalsSelect: {
+    settings: SettingsSelect<false> | SettingsSelect<true>;
+    stats: StatsSelect<false> | StatsSelect<true>;
+    calculator: CalculatorSelect<false> | CalculatorSelect<true>;
+  };
   locale: 'ru' | 'ky' | 'en';
   widgets: {
     collections: CollectionsWidget;
@@ -344,6 +356,28 @@ export interface City {
   isMain?: boolean | null;
   name?: string | null;
   region?: string | null;
+  /**
+   * напр. «г. Бишкек, ул. Тыныстанова, 199»
+   */
+  address?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  /**
+   * напр. «Пн–Пт, 9:00–18:00»
+   */
+  hours?: string | null;
+  /**
+   * Необязательно. Открывается при клике на филиал.
+   */
+  mapLink?: string | null;
+  /**
+   * Положение точки на карте. 0–100, напр. 48.7
+   */
+  posX?: number | null;
+  /**
+   * 0–100, напр. 13.4
+   */
+  posY?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -354,13 +388,132 @@ export interface City {
 export interface News {
   id: number;
   order?: number | null;
+  /**
+   * Латиницей, напр. «1000-ya-garantiya». Адрес: /news/<slug>. Заполняется автоматически из заголовка, если оставить пустым.
+   */
+  slug?: string | null;
   cat?: string | null;
   title?: string | null;
-  text?: string | null;
   /**
    * напр. «12 мая 2026 · 3 мин чтения»
    */
   date?: string | null;
+  /**
+   * Картинка для карточки и страницы новости.
+   */
+  cover?: (number | null) | Media;
+  text?: string | null;
+  /**
+   * Собери страницу из блоков в нужном порядке (перетаскивай за ⋮⋮): текст, фото, галерея, видео, документы, цитата, кнопка. Можно сколько угодно блоков и в любой последовательности.
+   */
+  content?:
+    | (
+        | {
+            /**
+             * Можно делать жирный/курсив, списки, ссылки, заголовки.
+             */
+            value?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'paragraph';
+          }
+        | {
+            text: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'headingBlock';
+          }
+        | {
+            image: number | Media;
+            caption?: string | null;
+            size?: ('full' | 'normal' | 'small') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'imageBlock';
+          }
+        | {
+            images?:
+              | {
+                  image: number | Media;
+                  caption?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
+        | {
+            /**
+             * Вставьте ссылку с YouTube или Vimeo. Если загружаете свой файл — оставьте пустым.
+             */
+            url?: string | null;
+            /**
+             * Используется, если ссылка не указана.
+             */
+            file?: (number | null) | Media;
+            caption?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'videoBlock';
+          }
+        | {
+            items?:
+              | {
+                  file: number | Media;
+                  title?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'filesBlock';
+          }
+        | {
+            text: string;
+            author?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quoteBlock';
+          }
+        | {
+            label: string;
+            url: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'buttonBlock';
+          }
+      )[]
+    | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -371,10 +524,178 @@ export interface News {
 export interface Story {
   id: number;
   order?: number | null;
+  /**
+   * Латиницей, напр. «aigerim-tekstil». Адрес: /stories/<slug>. Заполняется автоматически из имени, если оставить пустым.
+   */
+  slug?: string | null;
   badge?: string | null;
   name?: string | null;
   biz?: string | null;
+  /**
+   * Фото героя истории — для карточки и страницы.
+   */
+  photo?: (number | null) | Media;
   quote?: string | null;
+  /**
+   * Собери страницу истории из блоков в нужном порядке (перетаскивай за ⋮⋮): текст, фото, галерея, видео, документы, цитата, кнопка.
+   */
+  content?:
+    | (
+        | {
+            /**
+             * Можно делать жирный/курсив, списки, ссылки, заголовки.
+             */
+            value?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'paragraph';
+          }
+        | {
+            text: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'headingBlock';
+          }
+        | {
+            image: number | Media;
+            caption?: string | null;
+            size?: ('full' | 'normal' | 'small') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'imageBlock';
+          }
+        | {
+            images?:
+              | {
+                  image: number | Media;
+                  caption?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
+        | {
+            /**
+             * Вставьте ссылку с YouTube или Vimeo. Если загружаете свой файл — оставьте пустым.
+             */
+            url?: string | null;
+            /**
+             * Используется, если ссылка не указана.
+             */
+            file?: (number | null) | Media;
+            caption?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'videoBlock';
+          }
+        | {
+            items?:
+              | {
+                  file: number | Media;
+                  title?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'filesBlock';
+          }
+        | {
+            text: string;
+            author?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quoteBlock';
+          }
+        | {
+            label: string;
+            url: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'buttonBlock';
+          }
+      )[]
+    | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Банки и организации-партнёры. Показываются в разделе «Партнёры».
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partners".
+ */
+export interface Partner {
+  id: number;
+  order?: number | null;
+  /**
+   * напр. «Демир Банк», «USAID»
+   */
+  name: string;
+  /**
+   * Влияет на счётчики (банки / организации / международные).
+   */
+  type?: ('bank' | 'org' | 'intl') | null;
+  /**
+   * Необязательно. Если пусто — показывается название текстом.
+   */
+  logo?: (number | null) | Media;
+  /**
+   * напр. https://demirbank.kg
+   */
+  url?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Юбилейный таймлайн «Ключевые вехи» в разделе «10 лет».
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "milestones".
+ */
+export interface Milestone {
+  id: number;
+  order?: number | null;
+  /**
+   * напр. 2016
+   */
+  year: number;
+  /**
+   * напр. «Учреждение», «1000-я гарантия»
+   */
+  tag?: string | null;
+  desc?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -433,6 +754,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'stories';
         value: number | Story;
+      } | null)
+    | ({
+        relationTo: 'partners';
+        value: number | Partner;
+      } | null)
+    | ({
+        relationTo: 'milestones';
+        value: number | Milestone;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -642,6 +971,13 @@ export interface CitiesSelect<T extends boolean = true> {
   isMain?: T;
   name?: T;
   region?: T;
+  address?: T;
+  phone?: T;
+  email?: T;
+  hours?: T;
+  mapLink?: T;
+  posX?: T;
+  posY?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -651,10 +987,91 @@ export interface CitiesSelect<T extends boolean = true> {
  */
 export interface NewsSelect<T extends boolean = true> {
   order?: T;
+  slug?: T;
   cat?: T;
   title?: T;
-  text?: T;
   date?: T;
+  cover?: T;
+  text?: T;
+  content?:
+    | T
+    | {
+        paragraph?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+              blockName?: T;
+            };
+        headingBlock?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        imageBlock?:
+          | T
+          | {
+              image?: T;
+              caption?: T;
+              size?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              images?:
+                | T
+                | {
+                    image?: T;
+                    caption?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        videoBlock?:
+          | T
+          | {
+              url?: T;
+              file?: T;
+              caption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        filesBlock?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    file?: T;
+                    title?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        quoteBlock?:
+          | T
+          | {
+              text?: T;
+              author?: T;
+              id?: T;
+              blockName?: T;
+            };
+        buttonBlock?:
+          | T
+          | {
+              label?: T;
+              url?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  body?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -664,10 +1081,116 @@ export interface NewsSelect<T extends boolean = true> {
  */
 export interface StoriesSelect<T extends boolean = true> {
   order?: T;
+  slug?: T;
   badge?: T;
   name?: T;
   biz?: T;
+  photo?: T;
   quote?: T;
+  content?:
+    | T
+    | {
+        paragraph?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+              blockName?: T;
+            };
+        headingBlock?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        imageBlock?:
+          | T
+          | {
+              image?: T;
+              caption?: T;
+              size?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              images?:
+                | T
+                | {
+                    image?: T;
+                    caption?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        videoBlock?:
+          | T
+          | {
+              url?: T;
+              file?: T;
+              caption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        filesBlock?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    file?: T;
+                    title?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        quoteBlock?:
+          | T
+          | {
+              text?: T;
+              author?: T;
+              id?: T;
+              blockName?: T;
+            };
+        buttonBlock?:
+          | T
+          | {
+              label?: T;
+              url?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  body?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partners_select".
+ */
+export interface PartnersSelect<T extends boolean = true> {
+  order?: T;
+  name?: T;
+  type?: T;
+  logo?: T;
+  url?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "milestones_select".
+ */
+export interface MilestonesSelect<T extends boolean = true> {
+  order?: T;
+  year?: T;
+  tag?: T;
+  desc?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -710,6 +1233,221 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * Логотип, телефоны, e-mail, адрес головного офиса, соцсети и реквизиты. Переключайте язык (RU/KY/EN) сверху справа — поля с пометкой «(языковое)» заполняются на каждом языке.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings".
+ */
+export interface Setting {
+  id: number;
+  /**
+   * PNG/SVG. Показывается в шапке. Если пусто — берётся /gf_logo.png.
+   */
+  logo?: (number | null) | Media;
+  /**
+   * Для alt-текста логотипа и заголовка вкладки браузера.
+   */
+  siteName?: string | null;
+  /**
+   * напр. «7500». Показывается в шапке и плавающей кнопке.
+   */
+  phoneShort?: string | null;
+  /**
+   * напр. «7500 | (0312) 66 49 60». Показывается в блоке «Контакты» и футере.
+   */
+  phone?: string | null;
+  /**
+   * напр. office@gf.kg
+   */
+  email?: string | null;
+  /**
+   * напр. «г. Бишкек, пр. Чуй 114, 4 этаж, каб. 408»
+   */
+  address?: string | null;
+  /**
+   * напр. «Пн–Пт: 09:00 – 18:00»
+   */
+  hours?: string | null;
+  /**
+   * Необязательно.
+   */
+  mapLink?: string | null;
+  /**
+   * Иконки в футере. Порядок — перетаскиванием.
+   */
+  socials?:
+    | {
+        network?: ('instagram' | 'youtube' | 'linkedin' | 'facebook' | 'telegram' | 'whatsapp' | 'tiktok') | null;
+        /**
+         * напр. https://instagram.com/...
+         */
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * напр. https://gf.kg/. Кнопка «Перейти на старый сайт» в шапке.
+   */
+  oldSiteUrl?: string | null;
+  /**
+   * напр. «Свидетельство НБКР №1». Показывается в футере.
+   */
+  nbkrNotice?: string | null;
+  /**
+   * напр. «Оставить заявку».
+   */
+  floatingCtaText?: string | null;
+  /**
+   * напр. «41°N – 43°N · KGZ TERRITORY». Техническая подпись над картой филиалов.
+   */
+  mapCoordsLabel?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Ключевые цифры фонда. Вводите только число (без «млрд», пробелов и %). Форматирование («21 129», «18,2 млрд», «98,22%») сайт делает сам. Эти цифры показываются в блоке статистики, бегущей строке и разделе «Как это работает».
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stats".
+ */
+export interface Stat {
+  id: number;
+  /**
+   * напр. 21129 → покажется «21 129»
+   */
+  guaranteesCount?: number | null;
+  /**
+   * напр. 18.2 → «18,2 млрд»
+   */
+  guaranteesSum?: number | null;
+  /**
+   * напр. 54.8 → «54,8 млрд»
+   */
+  loansSum?: number | null;
+  /**
+   * напр. 98.22 → «98,22%»
+   */
+  repayRate?: number | null;
+  years?: number | null;
+  branches?: number | null;
+  partnersCount?: number | null;
+  /**
+   * Показывается в разделе «Как это работает».
+   */
+  regionsCovered?: number | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Параметры онлайн-калькулятора гарантии: диапазоны сумм и сроков, процент покрытия, ставка вознаграждения и валюты.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "calculator".
+ */
+export interface Calculator {
+  id: number;
+  minAmount?: number | null;
+  maxAmount?: number | null;
+  stepAmount?: number | null;
+  defaultAmount?: number | null;
+  minTerm?: number | null;
+  maxTerm?: number | null;
+  stepTerm?: number | null;
+  defaultTerm?: number | null;
+  /**
+   * Доля кредита, которую покрывает гарантия. напр. 50
+   */
+  guaranteePct?: number | null;
+  /**
+   * напр. 1.8
+   */
+  annualFeePct?: number | null;
+  /**
+   * Кнопки-переключатели валют. Первая — основная (сом).
+   */
+  currencies?:
+    | {
+        /**
+         * напр. KGS, USD, EUR
+         */
+        code: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings_select".
+ */
+export interface SettingsSelect<T extends boolean = true> {
+  logo?: T;
+  siteName?: T;
+  phoneShort?: T;
+  phone?: T;
+  email?: T;
+  address?: T;
+  hours?: T;
+  mapLink?: T;
+  socials?:
+    | T
+    | {
+        network?: T;
+        url?: T;
+        id?: T;
+      };
+  oldSiteUrl?: T;
+  nbkrNotice?: T;
+  floatingCtaText?: T;
+  mapCoordsLabel?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stats_select".
+ */
+export interface StatsSelect<T extends boolean = true> {
+  guaranteesCount?: T;
+  guaranteesSum?: T;
+  loansSum?: T;
+  repayRate?: T;
+  years?: T;
+  branches?: T;
+  partnersCount?: T;
+  regionsCovered?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "calculator_select".
+ */
+export interface CalculatorSelect<T extends boolean = true> {
+  minAmount?: T;
+  maxAmount?: T;
+  stepAmount?: T;
+  defaultAmount?: T;
+  minTerm?: T;
+  maxTerm?: T;
+  stepTerm?: T;
+  defaultTerm?: T;
+  guaranteePct?: T;
+  annualFeePct?: T;
+  currencies?:
+    | T
+    | {
+        code?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

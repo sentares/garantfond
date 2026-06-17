@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateContent } from '../lib/revalidate'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
@@ -8,6 +9,10 @@ export const Categories: CollectionConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [revalidateContent],
+    afterDelete: [revalidateContent],
   },
   admin: {
     useAsTitle: 'label',
