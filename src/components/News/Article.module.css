@@ -1,0 +1,203 @@
+.article {
+  padding: 120px 5% 80px;
+  max-width: 100%;
+  background: #fff;
+  min-height: 70vh;
+}
+
+.inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.back {
+  display: inline-block;
+  color: var(--blue2, #2455b0);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 28px;
+}
+.back:hover { text-decoration: underline; }
+
+.cat {
+  display: inline-block;
+  background: linear-gradient(135deg, #1b3e8f, #2455b0);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  line-height: 1.15;
+  color: #0e1a36;
+  margin: 0 0 12px;
+}
+
+.date {
+  color: #6b7280;
+  font-size: 15px;
+  margin-bottom: 28px;
+}
+
+.cover {
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+.cover img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.quote {
+  border-left: 4px solid var(--gf-gold-400, #c9a84c);
+  padding: 8px 0 8px 20px;
+  margin: 0 0 28px;
+  font-size: 20px;
+  font-style: italic;
+  color: #1f2a44;
+}
+
+.body {
+  font-size: 17px;
+  line-height: 1.75;
+  color: #1f2a44;
+}
+.body p { margin: 0 0 18px; }
+.body h2, .body h3, .body h4 { color: #0e1a36; line-height: 1.25; margin: 28px 0 12px; }
+.body h2 { font-size: 26px; }
+.body h3 { font-size: 22px; }
+.body ul, .body ol { margin: 0 0 18px; padding-left: 24px; }
+.body li { margin-bottom: 8px; }
+.body a { color: var(--blue2, #2455b0); }
+.body blockquote {
+  border-left: 4px solid var(--gf-gold-400, #c9a84c);
+  padding-left: 18px;
+  margin: 0 0 18px;
+  font-style: italic;
+  color: #3b4663;
+}
+.body img { max-width: 100%; border-radius: 12px; }
+
+/* ===== Конструктор страницы (ArticleContent) ===== */
+.content {
+  font-size: 17px;
+  line-height: 1.75;
+  color: #1f2a44;
+}
+.content > * { margin: 0 0 24px; }
+
+.cHeading {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0e1a36;
+  line-height: 1.25;
+  margin: 36px 0 14px;
+}
+
+.cFigure { margin: 0 0 28px; }
+.cFigure img,
+.cImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+}
+.img_normal { max-width: 700px; margin-left: auto; margin-right: auto; }
+.img_small { max-width: 380px; margin-left: auto; margin-right: auto; }
+
+.cCaption {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #6b7280;
+  text-align: center;
+}
+
+.cGallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  margin: 0 0 28px;
+}
+.cGalleryItem { margin: 0; }
+.cGalleryItem img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.cVideoWrap {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 */
+  border-radius: 14px;
+  overflow: hidden;
+  background: #000;
+}
+.cVideoWrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.cVideo { width: 100%; border-radius: 14px; display: block; }
+
+.cFiles {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 0 28px;
+}
+.cFile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border: 1px solid #e3e8f0;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #1f2a44;
+  font-weight: 600;
+  transition: background 0.15s, border-color 0.15s;
+}
+.cFile:hover { background: #f6f8fc; border-color: #c9d4e6; }
+.cFileIcon { font-size: 22px; }
+
+.cQuote {
+  border-left: 4px solid var(--gf-gold-400, #c9a84c);
+  padding: 8px 0 8px 22px;
+  margin: 0 0 28px;
+}
+.cQuote p { font-size: 20px; font-style: italic; color: #1f2a44; margin: 0 0 8px; }
+.cQuoteAuthor { font-size: 15px; color: #6b7280; font-style: normal; }
+
+.cButtonWrap { margin: 0 0 28px; }
+.cButton {
+  display: inline-block;
+  background: linear-gradient(135deg, #1b3e8f, #2455b0);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 13px 26px;
+  border-radius: 12px;
+  transition: opacity 0.15s;
+}
+.cButton:hover { opacity: 0.9; }
+
+.notFound {
+  text-align: center;
+  padding: 60px 0;
+}
+.notFound h1 { font-size: 64px; margin: 0 0 8px; color: #0e1a36; }
+.notFound p { color: #6b7280; margin-bottom: 24px; }
