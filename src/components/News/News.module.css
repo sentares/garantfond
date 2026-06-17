@@ -1,0 +1,20 @@
+.section{background:#fff}
+.head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px}
+.moreBtn{display:flex;align-items:center;gap:8px;background:var(--off);border:1.5px solid var(--border);color:var(--blue3);font-size:13px;font-weight:600;padding:13px 28px;border-radius:12px;cursor:pointer;transition:.25s;font-family:'Inter',sans-serif}
+.moreBtn:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+.grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:20px}
+.main{background:var(--bluegrad);border-radius:20px;overflow:hidden;cursor:pointer;transition:.3s;position:relative}
+.main:hover{transform:translateY(-4px)}
+.mainImg{height:200px;background:linear-gradient(135deg,var(--blue3),#1a2a5a);display:flex;align-items:center;justify-content:center;font-size:56px}
+.mainBody{padding:28px}
+.mainCat{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);display:block;margin-bottom:10px}
+.mainTitle{font-family:'Unbounded',sans-serif;font-size:16px;font-weight:700;color:#fff;line-height:1.4;margin-bottom:14px}
+.mainDate{font-size:11px;color:rgba(255,255,255,.4)}
+.card{background:#fff;border-radius:18px;padding:24px;border:1.5px solid var(--border);transition:.3s;cursor:pointer}
+.card:hover{border-color:var(--blue);transform:translateY(-4px);box-shadow:0 14px 32px rgba(14,38,96,.1)}
+.cardIcon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;background:var(--off)}
+.cardCat{font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:6px}
+.cardTitle{font-size:14px;font-weight:600;color:var(--blue3);line-height:1.4;margin-bottom:8px}
+.cardText{font-size:12px;color:var(--muted);line-height:1.6}
+.cardDate{font-size:11px;color:var(--dim);margin-top:12px}
+@media(max-width:1100px){.grid{grid-template-columns:1fr}}

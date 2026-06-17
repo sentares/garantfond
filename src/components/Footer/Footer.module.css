@@ -1,0 +1,44 @@
+.footer{background:#050B18;padding:52px 5% 24px}
+.top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;max-width:1440px;margin:0 auto;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.06)}
+.brandCol{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px}
+.nbkr{font-size:13px;color:rgba(255,255,255,.45);font-weight:400;letter-spacing:.02em;margin:0}
+.social{display:flex;gap:12px;align-items:center;justify-content:center}
+.soc{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:transform .2s,box-shadow .2s;box-shadow:0 3px 10px rgba(0,0,0,.35)}
+.soc:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 6px 16px rgba(0,0,0,.5)}
+.colTitle{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:18px}
+.colLinks{display:flex;flex-direction:column;gap:10px}
+.colLinks a{color:rgba(255,255,255,.45);text-decoration:none;font-size:13px;transition:.15s;font-weight:300}
+.colLinks a:hover{color:#fff}
+.btm{max-width:1440px;margin:24px auto 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.copy{font-size:12px;color:rgba(255,255,255,.2);font-weight:300}
+.badge{background:rgba(27,62,143,.2);border:1px solid rgba(27,62,143,.35);color:#90B8FF;font-size:11px;font-weight:600;padding:5px 14px;border-radius:20px;letter-spacing:.06em}
+
+/* ============================================================ */
+/* RESPONSIVE — Footer                                          */
+/* ============================================================ */
+
+@media(max-width:1100px){
+    .top{grid-template-columns:1fr 1fr 1fr;gap:36px}
+    .top>div:first-child{grid-column:1 / -1}
+}
+
+@media(max-width:768px){
+    .footer{padding:44px 6% 24px}
+    .top{grid-template-columns:1fr 1fr;gap:32px 24px;padding-bottom:36px}
+    .colTitle{margin-bottom:14px}
+}
+
+@media(max-width:600px){
+    .footer{padding:40px 5% 22px}
+    .top{grid-template-columns:1fr;gap:28px;padding-bottom:32px}
+    .btm{flex-direction:column;align-items:flex-start;gap:12px;text-align:left}
+}
+
+@media(max-width:380px){
+    .footer{padding:36px 16px 20px}
+    .top{gap:24px}
+    .colLinks a{font-size:12.5px}
+    .nbkr{font-size:12.5px}
+    .copy{font-size:11px}
+    .soc{width:38px;height:38px}
+}

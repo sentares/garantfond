@@ -1,0 +1,418 @@
+.section {
+    background: linear-gradient(180deg, #EEF3FC 0%, #e8eef8 100%);
+    padding: 80px 5%;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 20px;
+    max-width: 1440px;
+    margin: 0 auto;
+    align-items: start;
+}
+
+.mapContainer {
+    background: linear-gradient(145deg, #060f26, #0a1840, #071230);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 24px 64px rgba(6, 15, 38, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.mapHeader {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.coords {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.08em;
+    font-family: monospace;
+}
+
+.mapWrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 17 / 9;
+    overflow: hidden;
+}
+
+.mapImg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    user-select: none;
+    pointer-events: none;
+}
+
+.routeSvg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.compass {
+    position: absolute;
+    bottom: 14px;
+    right: 16px;
+    opacity: 0.38;
+    pointer-events: none;
+}
+
+.mapFooter {
+    padding: 14px 20px;
+    background: rgba(0, 0, 0, 0.25);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+}
+
+.mfLeft {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mfBadge {
+    background: #C9A84C;
+    color: #060f26;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.08em;
+    flex-shrink: 0;
+}
+
+.mfCity {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.mfCity span {
+    font-size: 10px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-left: 8px;
+}
+
+.mfSub {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.35);
+    margin-top: 2px;
+}
+
+/* ── Маркеры городов ── */
+
+.cityMarker {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cityRing {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(201, 168, 76, 0.08);
+    border: 1.5px solid rgba(201, 168, 76, 0.35);
+    transition: border-color 0.25s, background 0.25s;
+}
+
+.cityActive .cityRing {
+    background: rgba(201, 168, 76, 0.18);
+    border-color: rgba(201, 168, 76, 0.75);
+}
+
+.cityDot {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #C9A84C;
+    box-shadow: 0 0 6px rgba(201, 168, 76, 0.5);
+    transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+
+.cityActive .cityDot {
+    background: #f5d060;
+    box-shadow: 0 0 12px rgba(245, 208, 96, 0.8);
+    transform: scale(1.3);
+}
+
+.cityLabel {
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: Inter, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+    text-shadow: 0 0 8px #071230, 0 0 16px #071230, 0 1px 3px rgba(0,0,0,0.9);
+    pointer-events: none;
+}
+
+.cityMarker:hover .cityRing {
+    background: rgba(201, 168, 76, 0.15);
+    border-color: rgba(201, 168, 76, 0.65);
+}
+
+.cityMarker:hover .cityDot {
+    transform: scale(1.25);
+    box-shadow: 0 0 10px rgba(201, 168, 76, 0.75);
+}
+
+/* ── Бишкек (главный) ── */
+
+.cityMain {
+    z-index: 10;
+}
+
+.glowOrb {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+    rgba(240, 208, 96, 0.35) 0%,
+    rgba(201, 168, 76, 0.08) 60%,
+    transparent 100%);
+    pointer-events: none;
+}
+
+.ring1 {
+    position: absolute;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 2px solid rgba(201, 168, 76, 0.3);
+    animation: pulseRing1 2.5s ease-out infinite;
+    pointer-events: none;
+}
+
+.ring2 {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid rgba(201, 168, 76, 0.5);
+    animation: pulseRing2 2.5s ease-out infinite;
+    pointer-events: none;
+}
+
+.mainDot {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(201, 168, 76, 0.15);
+    border: 2.5px solid rgba(201, 168, 76, 0.7);
+    pointer-events: none;
+}
+
+.mainDotCore {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #f5d060;
+    box-shadow: 0 0 12px rgba(245, 208, 96, 1),
+    0 0 24px rgba(201, 168, 76, 0.6);
+    pointer-events: none;
+}
+
+.mainLabel {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.mainLabelName {
+    font-family: Inter, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #f0d060;
+    letter-spacing: 0.3em;
+    text-shadow: 0 0 12px rgba(240, 208, 96, 0.8),
+    0 0 24px rgba(201, 168, 76, 0.4),
+    0 1px 4px rgba(0,0,0,0.9);
+}
+
+.mainLabelSub {
+    font-family: Inter, sans-serif;
+    font-size: 8px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.25em;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+}
+
+@keyframes pulseRing1 {
+    0%   { transform: scale(0.85); opacity: 1; }
+    100% { transform: scale(1.7);  opacity: 0; }
+}
+
+@keyframes pulseRing2 {
+    0%   { transform: scale(1);   opacity: 0.8; }
+    100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* ── Правая панель ── */
+
+.panel {
+    background: #fff;
+    border-radius: 20px;
+    padding: 22px;
+    border: 1.5px solid var(--border);
+}
+
+.mpEyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mpEyebrow::before {
+    content: '';
+    width: 20px;
+    height: 2px;
+    background: var(--firegrad);
+    border-radius: 1px;
+}
+
+.mpTitle {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--blue3);
+    line-height: 1.3;
+    margin-bottom: 20px;
+}
+
+.branchList {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 18px;
+}
+
+.branchItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    border: 1.5px solid transparent;
+}
+
+.branchItem:hover,
+.branchActive {
+    background: var(--off);
+    border-color: var(--border);
+}
+
+.branchActive .biDot {
+    box-shadow: 0 0 8px rgba(201, 168, 76, 0.7);
+}
+
+.biLeft {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.biDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gf-gold-400);
+    flex-shrink: 0;
+    transition: box-shadow 0.2s;
+}
+
+.biName {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--blue3);
+}
+
+.biTag {
+    background: var(--blue);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+}
+
+.biCode {
+    font-size: 11px;
+    color: var(--dim);
+    font-family: monospace;
+    letter-spacing: 0.04em;
+}
+
+.mpAllLink {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    .cityLabel,
+    .mainLabelName {
+        font-size: 9px;
+        letter-spacing: 0.08em;
+    }
+    .mainLabelSub {
+        display: none;
+    }
+}

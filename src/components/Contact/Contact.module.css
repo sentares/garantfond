@@ -1,0 +1,20 @@
+.section{background:var(--off)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center;max-width:1440px;margin:0 auto}
+.cd{display:flex;align-items:center;gap:14px;padding:16px 0;border-bottom:1px solid var(--border)}
+.cd:last-of-type{border-bottom:none}
+.cdIcon{width:44px;height:44px;border-radius:12px;background:var(--bluegrad);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 4px 14px rgba(27,62,143,.3)}
+.cdLbl{font-size:10.5px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.cdVal{font-size:14px;font-weight:600;color:var(--blue3)}
+.form{background:#fff;border-radius:22px;padding:36px;box-shadow:0 16px 48px rgba(14,38,96,.1)}
+.formTitle{font-family:'Unbounded',sans-serif;font-size:18px;font-weight:700;color:var(--blue3);margin-bottom:6px}
+.formSub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.fRow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.field label{font-size:12px;font-weight:600;color:var(--text);letter-spacing:.03em}
+.field input,.field select,.field textarea{background:var(--off);border:1.5px solid var(--border);color:var(--text);font-size:13px;padding:11px 14px;border-radius:10px;outline:none;transition:border .2s;font-family:'Inter',sans-serif}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);background:#fff}
+.field textarea{height:88px;resize:none}
+.submit{width:100%;background:var(--bluegrad);color:#fff;font-size:14px;font-weight:700;padding:14px;border-radius:12px;border:none;cursor:pointer;transition:.25s;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 6px 20px rgba(27,62,143,.35)}
+.submit:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(27,62,143,.5)}
+.sent{background:linear-gradient(135deg,#0CAF60,#1DD17A)!important}
+.note{font-size:11px;color:var(--dim);text-align:center;margin-top:10px}

@@ -1,0 +1,147 @@
+.ann{background:linear-gradient(160deg,#050d1a 0%,#071430 40%,#040c20 100%);position:relative;overflow:hidden}
+.glow{position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.06) 0%,rgba(27,62,143,.08) 40%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;animation:glowPulse 6s ease-in-out infinite}
+.stars{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.star{position:absolute;border-radius:50%;background:#fff;animation:starTwinkle ease-in-out infinite}
+.inner{max-width:1440px;margin:0 auto;position:relative;z-index:2}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;margin-bottom:64px}
+.badge{display:inline-flex;align-items:center;gap:10px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.3);color:rgba(201,168,76,.9);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 20px;border-radius:30px;margin-bottom:22px}
+.title{font-family:'Unbounded',sans-serif;font-size:clamp(28px,4.5vw,54px);font-weight:900;color:#fff;line-height:1.08;margin-bottom:18px}
+.title em{font-style:italic;color:#A8D4F5;text-shadow:0 2px 20px rgba(168,212,245,.25)}
+.quote{border-left:3px solid var(--orange);padding-left:20px;margin-bottom:28px}
+.quoteText{font-size:15px;color:rgba(255,255,255,.6);line-height:1.8;font-style:italic;font-weight:300}
+.quoteSrc{font-size:12px;color:rgba(255,255,255,.3);margin-top:8px;letter-spacing:.04em}
+.decade{display:flex;align-items:center;justify-content:center}
+.annTen{position:relative;text-align:center;width:460px;height:460px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.annGlow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.22) 0%,transparent 70%);pointer-events:none;z-index:1;animation:annGlowPulse 3s ease-in-out infinite}
+
+/* ===== БОЛЬШАЯ «10» ===== */
+.dragonWrap{position:relative;width:460px;height:460px;margin:0 auto;display:flex;align-items:center;justify-content:center;z-index:2}
+.dragonSvg{position:absolute;inset:0;width:460px;height:460px;overflow:visible}
+.innerStack{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.centerNum{
+    font-family:'Playfair Display',Georgia,serif;
+    font-size:clamp(220px,26vw,320px);
+    font-weight:900;
+    font-style:italic;
+    line-height:1;
+    letter-spacing:-12px;
+    display:block;
+    text-align:center;
+    margin:0;
+    padding:0;
+    transform:translateY(-40px);
+    background:linear-gradient(
+            125deg,
+            #7a4e00 0%,
+            #C9A84C 15%,
+            #f5d060 30%,
+            #ffe066 42%,
+            #fff5c0 50%,
+            #ffe066 58%,
+            #C9A84C 70%,
+            #f5d060 80%,
+            #8a6010 90%,
+            #C9A84C 100%
+    );
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    background-size:400% 400%;
+    animation:goldShine 8s ease-in-out infinite;
+    filter:drop-shadow(0 0 48px rgba(201,168,76,.9)) drop-shadow(0 8px 16px rgba(0,0,0,.6));
+}
+@keyframes goldShine{
+    0%   {background-position:0% 50%;   filter:drop-shadow(0 0 48px rgba(201,168,76,.9)) drop-shadow(0 8px 16px rgba(0,0,0,.6))}
+    30%  {background-position:60% 30%;  filter:drop-shadow(0 0 80px rgba(255,240,120,1)) drop-shadow(0 8px 16px rgba(0,0,0,.6))}
+    50%  {background-position:100% 50%; filter:drop-shadow(0 0 100px rgba(255,255,200,1)) drop-shadow(0 8px 16px rgba(0,0,0,.6))}
+    70%  {background-position:60% 80%;  filter:drop-shadow(0 0 80px rgba(255,220,80,1))  drop-shadow(0 8px 16px rgba(0,0,0,.6))}
+    100% {background-position:0% 50%;   filter:drop-shadow(0 0 48px rgba(201,168,76,.9)) drop-shadow(0 8px 16px rgba(0,0,0,.6))}
+}
+.centerLines{position:absolute;inset:0;width:460px;height:460px;overflow:visible;z-index:3;pointer-events:none}
+.clP{animation:clPulse 3.5s ease-in-out infinite}
+@keyframes clPulse{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:.7;transform:scale(1.04)}}
+/* ===== /БОЛЬШАЯ «10» ===== */
+
+.tlTitle{text-align:center;font-family:'Unbounded',sans-serif;font-size:clamp(16px,2vw,22px);font-weight:700;color:rgba(255,255,255,.6);margin-bottom:44px;letter-spacing:.04em}
+.tlTrack{display:grid;grid-template-columns:repeat(6,1fr);position:relative}
+.tlTrack::before{content:'';position:absolute;top:16px;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(27,62,143,.5),rgba(196,32,32,.5),rgba(27,62,143,.5),transparent)}
+.tlItem{text-align:center;padding:0 10px}
+.tlDot{width:14px;height:14px;border-radius:50%;margin:0 auto 16px;position:relative;z-index:2}
+.tlYear{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:4px}
+.tlTag{font-size:8.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;color:rgba(201,168,76,.85)}
+.tlDesc{font-size:11.5px;color:rgba(255,255,255,.4);line-height:1.6}
+
+/* ============================================================ */
+/* RESPONSIVE — Anniversary                                      */
+/* ============================================================ */
+
+/* --- Планшет: до 1100px --- */
+@media (max-width:1100px){
+    .grid{gap:48px;margin-bottom:48px}
+    .annTen,.dragonWrap,.dragonSvg,.centerLines{width:380px;height:380px}
+    .annGlow{width:300px;height:300px}
+    .centerNum{font-size:clamp(180px,32vw,260px);transform:translateY(-30px)}
+}
+
+/* --- Планшет книжный: до 900px --- */
+@media (max-width:900px){
+    .title{font-size:clamp(24px,4.6vw,40px)}
+}
+
+/* --- Мобильный: до 768px --- */
+@media (max-width:768px){
+    .grid{grid-template-columns:1fr;gap:28px;margin-bottom:36px}
+    .decade{order:-1}
+    .badge{margin-bottom:16px}
+    .title{font-size:clamp(22px,5.2vw,32px)}
+    .quoteText{font-size:14px;line-height:1.7}
+
+    .annTen,.dragonWrap,.dragonSvg,.centerLines{width:280px;height:280px}
+    .annGlow{width:220px;height:220px}
+    .centerNum{font-size:clamp(150px,42vw,210px);transform:translateY(-22px);letter-spacing:-8px}
+
+    .tlTrack{grid-template-columns:repeat(2,1fr);gap:28px 16px}
+    .tlTrack::before{display:none}
+    .tlItem{padding:0 4px}
+    .tlYear{font-size:18px}
+    .tlTag{font-size:8px}
+    .tlDesc{font-size:11px}
+    .tlTitle{margin-bottom:28px}
+}
+
+/* --- Средний телефон: до 600px --- */
+@media (max-width:600px){
+    .title{font-size:clamp(20px,5vw,26px)}
+    .annTen,.dragonWrap,.dragonSvg,.centerLines{width:240px;height:240px}
+    .annGlow{width:190px;height:190px}
+    .centerNum{font-size:clamp(140px,48vw,190px);transform:translateY(-18px)}
+}
+
+/* --- Узкие телефоны: до 480px --- */
+@media (max-width:480px){
+    .title{font-size:clamp(18px,4.8vw,23px);line-height:1.15}
+    .quoteText{font-size:13px}
+    .quoteSrc{font-size:11px}
+    .annTen,.dragonWrap,.dragonSvg,.centerLines{width:210px;height:210px}
+    .annGlow{width:165px;height:165px}
+    .centerNum{font-size:clamp(120px,52vw,170px);transform:translateY(-14px)}
+
+    .tlTrack{grid-template-columns:1fr;gap:22px}
+    .tlDesc{max-width:280px;margin:0 auto}
+}
+
+/* --- iPhone SE: до 380px --- */
+@media (max-width:380px){
+    .title{font-size:clamp(17px,5vw,21px)}
+    .badge{font-size:10px;padding:7px 14px}
+    .annTen,.dragonWrap,.dragonSvg,.centerLines{width:180px;height:180px}
+    .annGlow{width:140px;height:140px}
+    .centerNum{font-size:clamp(105px,55vw,150px);transform:translateY(-12px)}
+}
+
+/* --- очень узкие: до 340px --- */
+@media (max-width:340px){
+    .title{font-size:19px}
+    .annTen,.dragonWrap,.dragonSvg,.centerLines{width:160px;height:160px}
+    .centerNum{font-size:120px;transform:translateY(-10px)}
+}

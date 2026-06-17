@@ -1,0 +1,70 @@
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;transition:all .4s}
+.scrolled{background:rgba(8,16,30,.97);backdrop-filter:blur(24px);box-shadow:0 2px 40px rgba(0,0,0,.4)}
+.inner{display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:72px;max-width:1440px;margin:0 auto}
+.logo{display:flex;align-items:center;text-decoration:none}
+.logoImg{height:54px;width:auto;display:block}
+.menu{display:flex;align-items:center;gap:4px}
+.link{color:rgba(255,255,255,.75);text-decoration:none;font-size:13px;font-weight:500;padding:8px 14px;border-radius:8px;transition:all .2s}
+.link:hover{color:#fff;background:rgba(255,255,255,.1)}
+.right{display:flex;align-items:center;gap:12px}
+.langWrap{display:flex;gap:3px;background:rgba(255,255,255,.08);padding:4px;border-radius:10px}
+.langBtn{background:transparent;border:none;color:rgba(255,255,255,.45);font-size:11px;font-weight:700;padding:5px 10px;border-radius:7px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;letter-spacing:.04em}
+.active{background:var(--gf-gold-400);color:#fff}
+
+.phone{display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,.85);text-decoration:none;font-size:13px;font-weight:600;padding:8px 12px;border-radius:9px;transition:all .2s;white-space:nowrap}
+.phone svg{color:var(--gf-gold-400)}
+.phone:hover{color:#fff;background:rgba(255,255,255,.08)}
+
+.oldSite{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:12.5px;font-weight:600;padding:9px 18px;border-radius:10px;text-decoration:none;cursor:pointer;transition:all .25s;font-family:'Inter',sans-serif;white-space:nowrap}
+.oldSite:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.35);transform:translateY(-1px)}
+
+/* ========== БУРГЕР ========== */
+.burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:42px;height:42px;background:transparent;border:none;cursor:pointer;padding:8px;border-radius:8px;transition:background .2s;z-index:210}
+.burger:hover{background:rgba(255,255,255,.08)}
+.burger span{display:block;width:24px;height:2.5px;background:#fff;border-radius:2px;transition:transform .3s ease,opacity .2s ease}
+.burgerOpen span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.burgerOpen span:nth-child(2){opacity:0}
+.burgerOpen span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+
+/* ========== МОБИЛЬНАЯ ПАНЕЛЬ ========== */
+.mobilePanel{
+    position:absolute;top:72px;left:0;right:0;
+    background:rgba(8,16,30,.98);
+    backdrop-filter:blur(24px);
+    border-top:1px solid rgba(255,255,255,.08);
+    box-shadow:0 12px 40px rgba(0,0,0,.5);
+    overflow:hidden;max-height:0;opacity:0;visibility:hidden;
+    transition:max-height .4s ease,opacity .3s ease,visibility .3s;
+}
+.mobileOpen{max-height:600px;opacity:1;visibility:visible}
+.mobileLinks{display:flex;flex-direction:column;padding:12px 5% 8px}
+.mobileLink{color:rgba(255,255,255,.8);text-decoration:none;font-size:15px;font-weight:500;padding:14px 8px;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s}
+.mobileLink:hover,.mobileLink:active{color:#fff}
+.mobileFoot{display:flex;flex-direction:column;gap:14px;padding:18px 5% 26px;align-items:stretch}
+.langWrapMobile{display:flex;gap:4px;background:rgba(255,255,255,.08);padding:5px;border-radius:11px;align-self:flex-start}
+.phoneMobile{display:inline-flex;align-items:center;gap:9px;color:#fff;text-decoration:none;font-size:15px;font-weight:600}
+.phoneMobile svg{color:var(--gf-gold-400)}
+.oldSiteMobile{display:flex;align-items:center;justify-content:center;background:var(--bluegrad);color:#fff;font-size:14px;font-weight:600;padding:13px 20px;border-radius:11px;text-decoration:none;box-shadow:0 4px 16px rgba(27,62,143,.35)}
+
+/* ============================================================ */
+/* RESPONSIVE                                                   */
+/* ============================================================ */
+@media(max-width:1100px){
+    .phone span{display:none}
+    .phone{padding:8px}
+    .right{gap:8px}
+}
+@media(max-width:900px){
+    .menu{display:none}
+    .right{display:none}
+    .burger{display:flex}
+}
+@media(max-width:480px){
+    .inner{height:64px;padding:0 18px}
+    .logoImg{height:44px}
+    .mobilePanel{top:64px}
+}
+@media(max-width:380px){
+    .inner{padding:0 14px}
+    .logoImg{height:40px}
+}
