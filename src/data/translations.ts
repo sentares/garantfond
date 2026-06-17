@@ -23,7 +23,7 @@ export const T: Record<Lang, Record<string, string>> = {
     // Продукты — секция
     prod_eyebrow:'ЛИНЕЙКА ГАРАНТИЙ',
     prod_title:'Гарантии под характер бизнеса',
-    prod_sub:'Шесть продуктов — для классического кредитования, исламского финансирования, лизинга, женского предпринимательства, крупного бизнеса и зелёных проектов.',
+    prod_sub:'Девять продуктов — для классического и исламского финансирования, лизинга, женского предпринимательства, крупного бизнеса, ипотеки, авто и зелёных проектов.',
     prod_tab_all:'Все', prod_tab_msb:'МСБ', prod_tab_islamic:'Исламское',
     prod_tab_women:'Женщины', prod_tab_leasing:'Лизинг', prod_tab_corp:'Корпоратив',
     prod_amount:'СУММА', prod_cover:'ПОКРЫТИЕ', prod_term:'СРОК',
@@ -131,7 +131,7 @@ export const T: Record<Lang, Record<string, string>> = {
     // Продукттар — бөлүм
     prod_eyebrow:'КЕПИЛДИК ЛИНЕЙКАСЫ',
     prod_title:'Бизнестин мүнөзүнө жараша кепилдиктер',
-    prod_sub:'Алты продукт — классикалык кредиттөө, ислам каржылоо, лизинг, аялдар ишкерлиги, ири бизнес жана жашыл долбоорлор үчүн.',
+    prod_sub:'Тогуз продукт — классикалык жана ислам каржылоо, лизинг, аялдар ишкерлиги, ири бизнес, ипотека, унаа жана жашыл долбоорлор үчүн.',
     prod_tab_all:'Баары', prod_tab_msb:'МКБ', prod_tab_islamic:'Исламдык',
     prod_tab_women:'Аялдар', prod_tab_leasing:'Лизинг', prod_tab_corp:'Корпоратив',
     prod_amount:'СУММА', prod_cover:'КАМТУУ', prod_term:'МӨӨНӨТ',
@@ -238,7 +238,7 @@ export const T: Record<Lang, Record<string, string>> = {
     // Products — section
     prod_eyebrow:'GUARANTEE LINE',
     prod_title:'Guarantees tailored to your business',
-    prod_sub:'Six products — for classic lending, Islamic finance, leasing, women entrepreneurship, large business and green projects.',
+    prod_sub:'Nine products — for classic and Islamic finance, leasing, women entrepreneurship, large business, mortgage, auto and green projects.',
     prod_tab_all:'All', prod_tab_msb:'SME', prod_tab_islamic:'Islamic',
     prod_tab_women:'Women', prod_tab_leasing:'Leasing', prod_tab_corp:'Corporate',
     prod_amount:'AMOUNT', prod_cover:'COVERAGE', prod_term:'TERM',
