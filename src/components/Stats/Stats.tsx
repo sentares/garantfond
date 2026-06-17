@@ -24,14 +24,14 @@ function animCount(el: HTMLElement) {
 }
 
 export default function Stats() {
-  const { t } = useLangContext()
+  const { t, stats } = useLangContext()
   const ref = useRef<HTMLDivElement>(null)
 
   const STATS = [
-    { icon: '🏷️', target: 21129, suffix: '',       desc: t('stat1') },
-    { icon: '💰', target: 18,    suffix: ' млрд',  desc: t('stat2') },
-    { icon: '📈', target: 55,    suffix: ' млрд',  desc: t('stat3') },
-    { icon: '✅', target: 98,    suffix: '%',       desc: t('stat4') },
+    { icon: '🏷️', target: Math.round(stats.guaranteesCount), suffix: '',      desc: t('stat1') },
+    { icon: '💰', target: Math.round(stats.guaranteesSum),   suffix: ' млрд', desc: t('stat2') },
+    { icon: '📈', target: Math.round(stats.loansSum),        suffix: ' млрд', desc: t('stat3') },
+    { icon: '✅', target: Math.round(stats.repayRate),        suffix: '%',     desc: t('stat4') },
   ]
 
   useEffect(() => {

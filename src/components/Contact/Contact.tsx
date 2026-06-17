@@ -4,7 +4,7 @@ import { useLangContext } from '@/context/LangContext'
 import styles             from './Contact.module.css'
 
 export default function Contact() {
-  const { t } = useLangContext()
+  const { t, settings, products } = useLangContext()
   const [sent, setSent] = useState(false)
   const submit = () => { setSent(true); setTimeout(() => setSent(false), 3000) }
 
@@ -16,7 +16,7 @@ export default function Contact() {
           </svg>
       ),
       label: t('contact_address_lbl'),
-      val: t('contact_address'),
+      val: settings.address || t('contact_address'),
     },
     {
       icon: (
@@ -25,7 +25,7 @@ export default function Contact() {
           </svg>
       ),
       label: t('contact_phone_lbl'),
-      val: t('contact_phone'),
+      val: settings.phone || t('contact_phone'),
     },
     {
       icon: (
@@ -34,7 +34,7 @@ export default function Contact() {
           </svg>
       ),
       label: t('contact_email_lbl'),
-      val: t('contact_email'),
+      val: settings.email || t('contact_email'),
     },
     {
       icon: (
@@ -43,7 +43,7 @@ export default function Contact() {
           </svg>
       ),
       label: t('contact_hours_lbl'),
-      val: t('contact_hours'),
+      val: settings.hours || t('contact_hours'),
     },
   ]
 
@@ -91,13 +91,10 @@ export default function Contact() {
             <div className={styles.field}>
               <label>{t('contact_product')}</label>
               <select>
-                <option value="">Выберите продукт</option>
-                <option>Горизонт (МСБ)</option>
-                <option>Береке</option>
-                <option>Ижара Плюс</option>
-                <option>Ишкер Айым</option>
-                <option>Корпоратив</option>
-                <option>Green</option>
+                <option value="">{t('contact_product_ph')}</option>
+                {products.map(p => (
+                  <option key={p.id} value={p.name}>{p.name}</option>
+                ))}
               </select>
             </div>
 

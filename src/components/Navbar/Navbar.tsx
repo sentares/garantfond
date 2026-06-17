@@ -1,6 +1,5 @@
 'use client'
 import { useState }         from 'react'
-import Image                from 'next/image'
 import { useScrolled }      from '@/hooks/useScrolled'
 import { useLangContext }   from '@/context/LangContext'
 import type { Lang }        from '@/types'
@@ -21,13 +20,14 @@ const NAV_ITEMS = [
   { href: '#contact',     k: 'nav_contact' },
 ]
 
-const PHONE = '7500'
-const OLD_SITE = 'https://gf.kg/'
-
 export default function Navbar() {
   const scrolled = useScrolled(60)
-  const { lang, setLang, t } = useLangContext()
+  const { lang, setLang, t, settings } = useLangContext()
   const [open, setOpen] = useState(false)
+
+  const PHONE = settings.phoneShort || settings.phone || '7500'
+  const OLD_SITE = settings.oldSiteUrl || 'https://gf.kg/'
+  const LOGO = settings.logo || '/gf_logo.png'
 
   const go = (id: string) => {
     document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -38,7 +38,7 @@ export default function Navbar() {
       <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
         <div className={styles.inner}>
           <a className={styles.logo} href="#" onClick={() => setOpen(false)}>
-            <img src="/gf_logo.png" alt="Гарантийный Фонд — 10 лет" className={styles.logoImg}/>
+            <img src={LOGO} alt={settings.siteName || 'Гарантийный Фонд — 10 лет'} className={styles.logoImg}/>
           </a>
 
           {/* МЕНЮ (десктоп) */}

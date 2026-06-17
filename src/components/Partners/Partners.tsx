@@ -2,10 +2,20 @@
 import { useLangContext } from '@/context/LangContext'
 import styles             from './Partners.module.css'
 
-const BANKS = ['Демир Банк','Айыл Банк','РСК Банк','Бакай Банк','Optima Bank','KICB','Эко Исламик','Кыргызкоммерц','Капитал Банк','Халык Банк','MBank','Финка Банк','Толубай Банк','BAI-Tushum','IFC','GIZ','USAID','ЕАБР']
-
 export default function Partners() {
-  const { t } = useLangContext()
+  const { t, partners, stats } = useLangContext()
+
+  const domestic = partners.filter(p => p.type !== 'intl').length
+  const intl = partners.filter(p => p.type === 'intl').length
+
+  const cards = [
+    { icon: '🏠', num: String(domestic || ''),       desc: t('partners_banks'),    grad: 'linear-gradient(135deg,#C42020,#DC5C10)' },
+    { icon: '📍', num: String(stats.branches || ''),  desc: t('partners_branches'), grad: 'linear-gradient(135deg,#1B3E8F,#2455B0)' },
+    { icon: '🌐', num: String(intl || ''),            desc: t('partners_intl'),     grad: 'linear-gradient(135deg,#DC5C10,#C9A84C)' },
+  ]
+
+  // для бесшовной прокрутки дублируем список
+  const loop = partners.length ? [...partners, ...partners] : []
 
   return (
       <section className={`sec ${styles.section}`} id="partners">
@@ -17,12 +27,8 @@ export default function Partners() {
             </h2>
           </div>
           <div className={`${styles.statsRow} three-col reveal`}>
-            {[
-              { icon: '🏠', num: '19', desc: t('partners_banks'),   grad: 'linear-gradient(135deg,#C42020,#DC5C10)' },
-              { icon: '📍', num: '7',  desc: t('partners_branches'),grad: 'linear-gradient(135deg,#1B3E8F,#2455B0)' },
-              { icon: '🌐', num: '3',  desc: t('partners_intl'),    grad: 'linear-gradient(135deg,#DC5C10,#C9A84C)' },
-            ].map(s => (
-                <div key={s.num} className={styles.statCard}>
+            {cards.map(s => (
+                <div key={s.desc} className={styles.statCard}>
                   <div className={styles.statIcon} style={{ background: s.grad }}>{s.icon}</div>
                   <div>
                     <div className={styles.statNum}>{s.num}</div>
@@ -31,13 +37,24 @@ export default function Partners() {
                 </div>
             ))}
           </div>
-          <div className={`${styles.scroll} reveal`}>
-            <div className={styles.track}>
-              {[...BANKS, ...BANKS].map((b, i) => (
-                  <div key={i} className={styles.logo}><span>{b}</span></div>
-              ))}
+          {loop.length > 0 && (
+            <div className={`${styles.scroll} reveal`}>
+              <div className={styles.track}>
+                {loop.map((p, i) => {
+                  const inner = p.logo
+                    ? <img src={p.logo} alt={p.name} style={{ maxHeight: 40, maxWidth: 120, objectFit: 'contain' }} />
+                    : <span>{p.name}</span>
+                  return (
+                    <div key={`${p.id}-${i}`} className={styles.logo}>
+                      {p.url
+                        ? <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none', display: 'flex', alignItems: 'center' }}>{inner}</a>
+                        : inner}
+                    </div>
+                  )
+                })}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
   )

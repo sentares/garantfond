@@ -1,18 +1,19 @@
 'use client'
 import { useLangContext } from '@/context/LangContext'
+import { formatNum } from '@/lib/format'
 import styles from './Ticker.module.css'
 
 export default function Ticker() {
-    const { t } = useLangContext()
+    const { t, stats } = useLangContext()
 
     const ITEMS = [
-        { num: '21 129',    lbl: t('ticker_1') },
-        { num: '18,2 млрд', lbl: t('ticker_2') },
-        { num: '54,8 млрд', lbl: t('ticker_3') },
-        { num: '98,22%',    lbl: t('ticker_4') },
-        { num: '10',        lbl: t('ticker_5') },
-        { num: '7',         lbl: t('ticker_6') },
-        { num: '28',        lbl: t('ticker_7') },
+        { num: formatNum(stats.guaranteesCount),         lbl: t('ticker_1') },
+        { num: `${formatNum(stats.guaranteesSum)} млрд`, lbl: t('ticker_2') },
+        { num: `${formatNum(stats.loansSum)} млрд`,      lbl: t('ticker_3') },
+        { num: `${formatNum(stats.repayRate)}%`,         lbl: t('ticker_4') },
+        { num: formatNum(stats.years),                   lbl: t('ticker_5') },
+        { num: formatNum(stats.branches),                lbl: t('ticker_6') },
+        { num: formatNum(stats.partnersCount),           lbl: t('ticker_7') },
     ]
 
     return (

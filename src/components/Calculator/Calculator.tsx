@@ -3,16 +3,16 @@ import { useState }       from 'react'
 import { useLangContext } from '@/context/LangContext'
 import styles             from './Calculator.module.css'
 
-type Cur = 'KGS' | 'USD' | 'EUR'
-
 export default function Calculator() {
-  const { t } = useLangContext()
-  const [cur, setCur]       = useState<Cur>('KGS')
-  const [amount, setAmount] = useState(10)
-  const [term, setTerm]     = useState(36)
+  const { t, calculator } = useLangContext()
+  const currencies = calculator.currencies.length ? calculator.currencies : ['KGS']
+  const [cur, setCur]       = useState<string>(currencies[0])
+  const [amount, setAmount] = useState(calculator.defaultAmount)
+  const [term, setTerm]     = useState(calculator.defaultTerm)
 
-  const guar     = (amount * 0.50).toFixed(2)
-  const fee      = Math.round(amount * 0.50 * 1e6 * 0.018).toLocaleString('ru-RU')
+  const coverRatio = calculator.guaranteePct / 100
+  const guar     = (amount * coverRatio).toFixed(2)
+  const fee      = Math.round(amount * coverRatio * 1e6 * (calculator.annualFeePct / 100)).toLocaleString('ru-RU')
   const curLabel = cur === 'KGS' ? 'сом' : cur
 
   return (
@@ -36,7 +36,7 @@ export default function Calculator() {
           </div>
           <div className={`${styles.right} reveal-r`}>
             <div className={styles.curTabs}>
-              {(['KGS', 'USD', 'EUR'] as Cur[]).map(c => (
+              {currencies.map(c => (
                   <button key={c} className={`${styles.ctab} ${cur === c ? styles.ctabOn : ''}`}
                           onClick={() => setCur(c)}>{c}</button>
               ))}
@@ -44,12 +44,14 @@ export default function Calculator() {
             <div className={styles.label}>
               {t('calc_amount')}<strong>{amount.toFixed(1)} млн {curLabel}</strong>
             </div>
-            <input type="range" className={styles.slider} min={1} max={50} step={0.5}
+            <input type="range" className={styles.slider}
+                   min={calculator.minAmount} max={calculator.maxAmount} step={calculator.stepAmount}
                    value={amount} onChange={e => setAmount(+e.target.value)}/>
             <div className={styles.label}>
               {t('calc_term')}<strong>{term} {t('calc_months')}</strong>
             </div>
-            <input type="range" className={styles.slider} min={6} max={84} step={6}
+            <input type="range" className={styles.slider}
+                   min={calculator.minTerm} max={calculator.maxTerm} step={calculator.stepTerm}
                    value={term} onChange={e => setTerm(+e.target.value)}/>
             <div className={styles.result}>
               <div>

@@ -5,70 +5,9 @@ import styles                from './Anniversary.module.css'
 
 const DOT_COLORS = ['#C42020','#D04818','#DC7010','#1B3E8F','#2455B0','#3068D0']
 
-// Тексты секции встроены прямо здесь (3 языка), чтобы не зависеть от внешнего словаря
-const TEXT = {
-  ru: {
-    badge: '🎉 Юбилейный год · 2016–2026',
-    title1: 'Десять лет',
-    title2: 'на службе',
-    title3: 'предпринимателей',
-    quote: '«За десять лет мы научились видеть в каждой заявке не цифру, а судьбу. Эта оптика и есть наш капитал.»',
-    quoteSrc: '— Из обращения председателя правления',
-    btn: 'Смотреть юбилейный спецпроект →',
-    tlTitle: 'Ключевые вехи',
-    tl: [
-      { year: 2016, tag: 'Учреждение',         desc: 'Распоряжение Правительства КР. Уставный капитал — 72 млн сом.' },
-      { year: 2018, tag: '1000-я гарантия',    desc: 'Пройдена отметка в 1 000 выданных гарантий.' },
-      { year: 2020, tag: 'COVID-программа',     desc: 'Антикризисная поддержка МСБ: отсрочки, переоформление.' },
-      { year: 2022, tag: 'Программа «Келечек»', desc: 'Запуск гарантий для женского предпринимательства.' },
-      { year: 2024, tag: '50 млрд сом',         desc: 'Совокупный объём обеспеченных кредитов превысил 50 млрд сом.' },
-      { year: 2026, tag: '10-летие',            desc: 'Юбилейный год: 18,2 млрд сом гарантий, 7 филиалов, 28 партнёров.' },
-    ],
-  },
-  ky: {
-    badge: '🎉 Юбилей жылы · 2016–2026',
-    title1: 'Он жыл',
-    title2: 'ишкерлерге',
-    title3: 'кызмат кылып',
-    quote: '«Он жылда биз ар бир арызда сандан эмес, тагдырды көрүүнү үйрөндүк. Ушул көз караш — биздин капитал.»',
-    quoteSrc: '— Башкарма төрагасынын кайрылуусунан',
-    btn: 'Юбилей долбоорун көрүү →',
-    tlTitle: 'Негизги вехалар',
-    tl: [
-      { year: 2016, tag: 'Негизделген',          desc: 'КР Өкмөтүнүн буйругу. Уставдык капитал — 72 млн сом.' },
-      { year: 2018, tag: '1000-чи кепилдик',      desc: '1 000 берилген кепилдик чегинен өтүлдү.' },
-      { year: 2020, tag: 'COVID-программа',        desc: 'ОКБ үчүн кризиске каршы колдоо: мөөнөттөрдү узартуу.' },
-      { year: 2022, tag: '«Келечек» программасы', desc: 'Аял ишкерчилиги үчүн кепилдиктердин ишке кириши.' },
-      { year: 2024, tag: '50 млрд сом',            desc: 'Камсыздалган кредиттердин көлөмү 50 млрд сомдон ашты.' },
-      { year: 2026, tag: '10 жылдык',             desc: 'Юбилей жылы: 18,2 млрд сом кепилдик, 7 филиал, 28 өнөктөш.' },
-    ],
-  },
-  en: {
-    badge: '🎉 Anniversary Year · 2016–2026',
-    title1: 'Ten years',
-    title2: 'serving',
-    title3: 'entrepreneurs',
-    quote: '"Over ten years we learned to see not a number in each application, but a destiny. This vision is our capital."',
-    quoteSrc: "— From the Chairman's address",
-    btn: 'View anniversary project →',
-    tlTitle: 'Key milestones',
-    tl: [
-      { year: 2016, tag: 'Founded',              desc: 'Decree of the Government of KR. Charter capital — 72M som.' },
-      { year: 2018, tag: '1000th guarantee',     desc: 'Passed the milestone of 1,000 guarantees issued.' },
-      { year: 2020, tag: 'COVID Programme',       desc: 'Anti-crisis support for SMEs: deferrals, restructuring.' },
-      { year: 2022, tag: '"Kelechek" Programme', desc: 'Launch of guarantees for women entrepreneurs.' },
-      { year: 2024, tag: '50B som',               desc: 'Total volume of supported loans exceeded 50B som.' },
-      { year: 2026, tag: '10th Anniversary',     desc: 'Jubilee year: 18.2B som in guarantees, 7 branches, 28 partners.' },
-    ],
-  },
-} as const
-
 export default function Anniversary() {
-  const { lang } = useLangContext()
+  const { t, milestones } = useLangContext()
   const starsRef = useRef<HTMLDivElement>(null)
-
-  // если lang вдруг не из набора — берём ru
-  const tx = TEXT[lang as keyof typeof TEXT] ?? TEXT.ru
 
   useEffect(() => {
     const c = starsRef.current
@@ -89,18 +28,18 @@ export default function Anniversary() {
         <div className={styles.inner}>
           <div className={`${styles.grid} two-col reveal`}>
             <div>
-              <span className={styles.badge}>{tx.badge}</span>
+              <span className={styles.badge}>{t('ann_badge')}</span>
               <h2 className={styles.title}>
-                {tx.title1}<br/>
-                <em>{tx.title2}<br/>{tx.title3}</em>
+                {t('ann_title1')}<br/>
+                <em>{t('ann_title2')}<br/>{t('ann_title3')}</em>
               </h2>
               <div className={styles.quote}>
-                <p className={styles.quoteText}>{tx.quote}</p>
-                <p className={styles.quoteSrc}>{tx.quoteSrc}</p>
+                <p className={styles.quoteText}>{t('ann_quote')}</p>
+                <p className={styles.quoteSrc}>{t('ann_quote_src')}</p>
               </div>
               <button className="btn-blue"
                       onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}>
-                {tx.btn}
+                {t('ann_btn')}
               </button>
             </div>
 
@@ -264,12 +203,12 @@ export default function Anniversary() {
           </div>
 
           <div className="reveal">
-            <div className={styles.tlTitle}>{tx.tlTitle}</div>
+            <div className={styles.tlTitle}>{t('ann_tl_title')}</div>
             <div className={`${styles.tlTrack} six-col`}>
-              {tx.tl.map((item, i) => (
-                  <div key={i} className={styles.tlItem}>
+              {milestones.map((item, i) => (
+                  <div key={item.id} className={styles.tlItem}>
                     <div className={styles.tlDot}
-                         style={{ background: DOT_COLORS[i], boxShadow: `0 0 10px ${DOT_COLORS[i]}80` }}/>
+                         style={{ background: DOT_COLORS[i % DOT_COLORS.length], boxShadow: `0 0 10px ${DOT_COLORS[i % DOT_COLORS.length]}80` }}/>
                     <div className={styles.tlYear}>{item.year}</div>
                     <div className={styles.tlTag}>{item.tag}</div>
                     <div className={styles.tlDesc}>{item.desc}</div>

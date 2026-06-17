@@ -1,10 +1,11 @@
 'use client'
 import { useState } from 'react'
 import { useLangContext } from '@/context/LangContext'
+import { formatNum } from '@/lib/format'
 import styles from './HowItWorks.module.css'
 
 export default function HowItWorks() {
-  const { t } = useLangContext()
+  const { t, stats } = useLangContext()
   const [active, setActive] = useState(0)
 
   const STEPS = [
@@ -15,10 +16,10 @@ export default function HowItWorks() {
   ]
 
   const CARDS = [
-    { icon: '📋', num: '21 129',    lbl: t('how_stat1_lbl') },
-    { icon: '💎', num: '18,2 млрд', lbl: t('how_stat2_lbl') },
-    { icon: '🏦', num: '54,8 млрд', lbl: t('how_stat3_lbl') },
-    { icon: '📍', num: '6',         lbl: t('how_stat4_lbl') },
+    { icon: '📋', num: formatNum(stats.guaranteesCount),         lbl: t('how_stat1_lbl') },
+    { icon: '💎', num: `${formatNum(stats.guaranteesSum)} млрд`, lbl: t('how_stat2_lbl') },
+    { icon: '🏦', num: `${formatNum(stats.loansSum)} млрд`,      lbl: t('how_stat3_lbl') },
+    { icon: '📍', num: formatNum(stats.regionsCovered),          lbl: t('how_stat4_lbl') },
   ]
 
   return (

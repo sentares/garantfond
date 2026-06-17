@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 import { useLangContext } from '@/context/LangContext'
 import styles             from './Stories.module.css'
 
@@ -25,15 +26,17 @@ export default function Stories() {
             {stories.map((s, i) => (
                 <div key={s.id} className={`${styles.card} reveal`}
                      style={{ transitionDelay: `${i * 0.1}s` }}>
-                  <div className={styles.photo} style={{ background: GRADIENTS[i % GRADIENTS.length] }}>
-                    <span className={styles.letter}>{s.name.charAt(0)}</span>
+                  <div className={styles.photo} style={{ background: GRADIENTS[i % GRADIENTS.length], position: 'relative', overflow: 'hidden' }}>
+                    {s.photo
+                      ? <img src={s.photo} alt={s.name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                      : <span className={styles.letter}>{s.name.charAt(0)}</span>}
                     <span className={styles.badge}>{s.badge}</span>
                   </div>
                   <div className={styles.body}>
                     <div className={styles.name}>{s.name}</div>
                     <div className={styles.biz}>{s.biz}</div>
                     <p className={styles.quote}>{s.quote}</p>
-                    <a href="#" className={styles.link}>{t('stories_read')}</a>
+                    <Link href={`/stories/${s.slug}`} className={styles.link}>{t('stories_read')}</Link>
                   </div>
                 </div>
             ))}
