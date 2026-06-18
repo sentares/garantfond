@@ -49,6 +49,13 @@ export const Cities: CollectionConfig = {
       ],
     },
     {
+      name: 'director',
+      type: 'text',
+      label: 'Руководитель филиала',
+      localized: true,
+      admin: { description: 'ФИО начальника филиала — показывается в попапе при клике на филиал.' },
+    },
+    {
       name: 'address',
       type: 'text',
       label: 'Адрес',

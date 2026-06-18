@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useLangContext } from '@/context/LangContext'
 import type { CityView } from '@/types'
 import { KG_MAP_BASE64 } from './mapBase64'
+import BranchModal from './BranchModal'
 import styles from './MapSection.module.css'
 
 const hasPos = (c: CityView) => c.posX !== null && c.posY !== null
@@ -10,6 +11,13 @@ const hasPos = (c: CityView) => c.posX !== null && c.posY !== null
 export default function MapSection() {
   const { lang, cities, t, settings } = useLangContext()
   const [active, setActive] = useState<CityView | undefined>(cities[0])
+  const [openCity, setOpenCity] = useState<CityView | null>(null)
+
+  // клик по филиалу (на карте или в списке): подсветить и открыть попап с инфо
+  const selectCity = (city: CityView) => {
+    setActive(city)
+    setOpenCity(city)
+  }
 
   const l = lang
   if (!cities.length || !active) return null
@@ -80,7 +88,7 @@ export default function MapSection() {
                     <button key={city.id}
                             className={[styles.cityMarker, city.isMain ? styles.cityMain : '', isActive && !city.isMain ? styles.cityActive : ''].join(' ')}
                             style={{ left: `${city.posX}%`, top: `${city.posY}%` }}
-                            onClick={() => setActive(city)}
+                            onClick={() => selectCity(city)}
                             title={name}
                     >
                       {city.isMain ? (
@@ -141,7 +149,7 @@ export default function MapSection() {
               {cities.map(city => (
                   <div key={city.id}
                        className={`${styles.branchItem} ${active.id === city.id ? styles.branchActive : ''}`}
-                       onClick={() => setActive(city)}
+                       onClick={() => selectCity(city)}
                   >
                     <div className={styles.biLeft}>
                       <span className={styles.biDot} />
@@ -159,6 +167,8 @@ export default function MapSection() {
           </div>
 
         </div>
+
+        {openCity && <BranchModal city={openCity} onClose={() => setOpenCity(null)} />}
       </section>
   )
 }

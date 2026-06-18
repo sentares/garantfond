@@ -1,12 +1,52 @@
 'use client'
 import { useState }       from 'react'
 import { useLangContext } from '@/context/LangContext'
+import type { Lang }      from '@/types'
 import styles             from './Contact.module.css'
 
+const MSG = {
+  sending:  { ru: 'Отправка…',                              ky: 'Жөнөтүлүүдө…',                                  en: 'Sending…' },
+  required: { ru: 'Укажите имя и телефон',                  ky: 'Атыңызды жана телефонду жазыңыз',                en: 'Please enter your name and phone' },
+  error:    { ru: 'Не удалось отправить. Попробуйте ещё раз или позвоните нам.',
+              ky: 'Жөнөтүлгөн жок. Кайра аракет кылыңыз же бизге чалыңыз.',
+              en: 'Could not send. Please try again or call us.' },
+} satisfies Record<string, Record<Lang, string>>
+
+const EMPTY = { name: '', phone: '', company: '', product: '', comment: '', website: '' }
+type Status = 'idle' | 'sending' | 'sent' | 'error'
+
 export default function Contact() {
-  const { t, settings, products } = useLangContext()
-  const [sent, setSent] = useState(false)
-  const submit = () => { setSent(true); setTimeout(() => setSent(false), 3000) }
+  const { t, lang, settings, products } = useLangContext()
+  const [form, setForm]     = useState(EMPTY)
+  const [status, setStatus] = useState<Status>('idle')
+  const [errMsg, setErrMsg] = useState('')
+
+  const sent = status === 'sent'
+  const set = (k: keyof typeof EMPTY) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+    setForm(f => ({ ...f, [k]: e.target.value }))
+
+  const submit = async () => {
+    if (status === 'sending') return
+    const name = form.name.trim()
+    const phone = form.phone.trim()
+    if (name.length < 2 || phone.length < 5) {
+      setStatus('error'); setErrMsg(MSG.required[lang]); return
+    }
+    setStatus('sending'); setErrMsg('')
+    try {
+      const res = await fetch('/api/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, lang }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok || !data?.ok) throw new Error('failed')
+      setStatus('sent'); setForm(EMPTY)
+      setTimeout(() => setStatus('idle'), 4000)
+    } catch {
+      setStatus('error'); setErrMsg(MSG.error[lang])
+    }
+  }
 
   const INFO = [
     {
@@ -75,22 +115,22 @@ export default function Contact() {
             <div className={`${styles.fRow} f-row-grid`}>
               <div className={styles.field}>
                 <label>{t('contact_name')}</label>
-                <input type="text" placeholder="Айгуль Бекова"/>
+                <input type="text" placeholder="Айгуль Бекова" value={form.name} onChange={set('name')}/>
               </div>
               <div className={styles.field}>
                 <label>{t('contact_phone_label')}</label>
-                <input type="tel" placeholder="+996 700 000 000"/>
+                <input type="tel" placeholder="+996 700 000 000" value={form.phone} onChange={set('phone')}/>
               </div>
             </div>
 
             <div className={styles.field}>
               <label>{t('contact_company')}</label>
-              <input type="email" placeholder="email@example.com"/>
+              <input type="text" placeholder="ОсОО «Ромашка»" value={form.company} onChange={set('company')}/>
             </div>
 
             <div className={styles.field}>
               <label>{t('contact_product')}</label>
-              <select>
+              <select value={form.product} onChange={set('product')}>
                 <option value="">{t('contact_product_ph')}</option>
                 {products.map(p => (
                   <option key={p.id} value={p.name}>{p.name}</option>
@@ -100,15 +140,30 @@ export default function Contact() {
 
             <div className={styles.field}>
               <label>{t('contact_comment')}</label>
-              <textarea placeholder="Опишите вашу ситуацию..."/>
+              <textarea placeholder="Опишите вашу ситуацию..." value={form.comment} onChange={set('comment')}/>
             </div>
+
+            {/* honeypot: невидимое поле-ловушка для ботов */}
+            <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                value={form.website}
+                onChange={set('website')}
+                style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }}
+            />
 
             <button
                 className={`${styles.submit} ${sent ? styles.sent : ''}`}
                 onClick={submit}
+                disabled={status === 'sending'}
             >
               {sent ? (
                   <span>{t('contact_sent')}</span>
+              ) : status === 'sending' ? (
+                  <span>{MSG.sending[lang]}</span>
               ) : (
                   <>
                     <span>{t('contact_submit')}</span>
@@ -119,7 +174,9 @@ export default function Contact() {
               )}
             </button>
 
-            <p className={styles.note}>{t('contact_note')}</p>
+            {status === 'error'
+                ? <p className={styles.note} style={{ color: '#c0392b' }}>{errMsg}</p>
+                : <p className={styles.note}>{t('contact_note')}</p>}
           </div>
 
         </div>

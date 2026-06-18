@@ -209,7 +209,7 @@ const fetchSiteContent = async (): Promise<SiteContent> => {
 
   // Города: один документ на город с локализованными полями.
   // Собираем name/region/address/hours по всем локалям в одну запись.
-  type CityLoc = { name: string; region: string; address: string; hours: string }
+  type CityLoc = { name: string; region: string; director: string; address: string; hours: string }
   const cityByLocale = empty<Record<string, CityLoc>>()
   let order: {
     cityId: string
@@ -236,6 +236,7 @@ const fetchSiteContent = async (): Promise<SiteContent> => {
       m[s(d.cityId)] = {
         name: s(d.name),
         region: s(d.region),
+        director: s(d.director),
         address: s(d.address),
         hours: s(d.hours),
       }
@@ -271,6 +272,7 @@ const fetchSiteContent = async (): Promise<SiteContent> => {
     posY: c.posY,
     name: triple((l) => l?.name ?? '', c.cityId),
     region: triple((l) => l?.region ?? '', c.cityId),
+    director: triple((l) => l?.director ?? '', c.cityId),
     address: triple((l) => l?.address ?? '', c.cityId),
     hours: triple((l) => l?.hours ?? '', c.cityId),
   }))

@@ -175,6 +175,24 @@ export const CITY_COORDS: Record<string, { posX: number; posY: number }> = {
   batken: { posX: 16.5, posY: 77.1 },
 }
 
+// --- Руководители филиалов (поле director, для попапа) ---
+// ФИО одинаковы для ru/ky (кириллица); en дозаполняется в админке (пусто → фолбэк на ru).
+// Ключ — cityId (см. CITIES). У главного офиса (bishkek) руководитель не задан.
+export const CITY_DIRECTORS: Record<string, string> = {
+  manas: 'Бекташев Абдихалил Абдилазизович', // Жалал-Абад
+  osh: 'Суранов Марипбек Равшанович',
+  talas: 'Жусупов Мурат Наматбекович',
+  karakol: 'Дыйкамбаев Алмазбек Мукашович', // Иссык-Куль
+  naryn: 'Чукуев Камчыбек Муканбетович',
+  batken: 'Токтосунов Канымет Асылбекович',
+}
+
+// --- Исправление названий городов (плейсхолдеры исходных данных) ---
+// «Манас» (Джалал-Абадская обл.) → «Жалал-Абад».
+export const CITY_NAME_OVERRIDES: Record<string, L> = {
+  manas: { ru: 'Жалал-Абад', ky: 'Жалал-Абад', en: 'Jalal-Abad' },
+}
+
 // --- «Общие настройки» (global: settings) ---
 export const SETTINGS = {
   siteName: { ru: 'Гарантийный Фонд', ky: 'Кепилдик Фонду', en: 'Guarantee Fund' } as L,

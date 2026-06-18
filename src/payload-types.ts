@@ -77,6 +77,7 @@ export interface Config {
     stories: Story;
     partners: Partner;
     milestones: Milestone;
+    applications: Application;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -94,6 +95,7 @@ export interface Config {
     stories: StoriesSelect<false> | StoriesSelect<true>;
     partners: PartnersSelect<false> | PartnersSelect<true>;
     milestones: MilestonesSelect<false> | MilestonesSelect<true>;
+    applications: ApplicationsSelect<false> | ApplicationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -356,6 +358,10 @@ export interface City {
   isMain?: boolean | null;
   name?: string | null;
   region?: string | null;
+  /**
+   * ФИО начальника филиала — показывается в попапе при клике на филиал.
+   */
+  director?: string | null;
   /**
    * напр. «г. Бишкек, ул. Тыныстанова, 199»
    */
@@ -701,6 +707,25 @@ export interface Milestone {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "applications".
+ */
+export interface Application {
+  id: number;
+  status?: ('new' | 'in_progress' | 'closed') | null;
+  /**
+   * С какого языка сайта пришла заявка.
+   */
+  lang?: string | null;
+  name: string;
+  phone: string;
+  company?: string | null;
+  product?: string | null;
+  comment?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -762,6 +787,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'milestones';
         value: number | Milestone;
+      } | null)
+    | ({
+        relationTo: 'applications';
+        value: number | Application;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -971,6 +1000,7 @@ export interface CitiesSelect<T extends boolean = true> {
   isMain?: T;
   name?: T;
   region?: T;
+  director?: T;
   address?: T;
   phone?: T;
   email?: T;
@@ -1191,6 +1221,21 @@ export interface MilestonesSelect<T extends boolean = true> {
   year?: T;
   tag?: T;
   desc?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "applications_select".
+ */
+export interface ApplicationsSelect<T extends boolean = true> {
+  status?: T;
+  lang?: T;
+  name?: T;
+  phone?: T;
+  company?: T;
+  product?: T;
+  comment?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url'
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import sharp from 'sharp'
 
 import { Users } from './collections/Users'
@@ -16,6 +17,7 @@ import { News } from './collections/News'
 import { Stories } from './collections/Stories'
 import { Partners } from './collections/Partners'
 import { Milestones } from './collections/Milestones'
+import { Applications } from './collections/Applications'
 import { Settings } from './globals/Settings'
 import { Stats } from './globals/Stats'
 import { Calculator } from './globals/Calculator'
@@ -33,7 +35,7 @@ export default buildConfig({
       title: 'ГарантФонд · Админка',
     },
   },
-  collections: [Users, Media, Translations, Categories, Products, Cities, News, Stories, Partners, Milestones],
+  collections: [Users, Media, Translations, Categories, Products, Cities, News, Stories, Partners, Milestones, Applications],
   globals: [Settings, Stats, Calculator],
   localization: {
     locales: [
@@ -54,5 +56,15 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
+  // Хранилище медиа: на проде (Vercel) ФС эфемерна → льём в Vercel Blob.
+  // Включается только при заданном BLOB_READ_WRITE_TOKEN; в dev без токена —
+  // обычное локальное хранилище (public/media), как и было.
+  plugins: [
+    vercelBlobStorage({
+      enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+      collections: { media: true },
+      token: process.env.BLOB_READ_WRITE_TOKEN || '',
+    }),
+  ],
   sharp,
 })

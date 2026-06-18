@@ -11,6 +11,8 @@ import {
   MILESTONES,
   PARTNERS,
   CITY_COORDS,
+  CITY_DIRECTORS,
+  CITY_NAME_OVERRIDES,
   SETTINGS,
   STATS,
   CALCULATOR,
@@ -61,6 +63,24 @@ async function mapLimit<T>(items: T[], limit: number, fn: (item: T, i: number) =
 }
 
 const CONC = 8
+
+/**
+ * Поля филиала (контакты + руководитель) для города — общая логика для полного
+ * сида (создание) и точечного обновления (seedBranches). phone/email НЕ
+ * локализованы → задаём их только на locale 'ru'.
+ */
+function cityBranchData(cityId: string, lang: Lang, isMain: boolean): Record<string, unknown> {
+  const director = CITY_DIRECTORS[cityId]
+  return {
+    // часы/телефон — плейсхолдер из главного офиса (адреса филиалов остаются пустыми)
+    hours: SETTINGS.hours[lang],
+    ...(lang === 'ru' ? { phone: SETTINGS.phone } : {}),
+    // ФИО руководителя: ru/ky — кириллица; en пусто (в UI фолбэк на ru)
+    ...(director ? { director: lang === 'en' ? '' : director } : {}),
+    // у главного офиса — реальный адрес/почта из настроек
+    ...(isMain ? { address: SETTINGS.address[lang], ...(lang === 'ru' ? { email: SETTINGS.email } : {}) } : {}),
+  }
+}
 
 /**
  * Заполняет БД исходным контентом. Идемпотентно: контентные коллекции
@@ -189,7 +209,7 @@ export async function runSeed(payload: Payload): Promise<string[]> {
   })
   info(`📦 Products: ${PRODUCTS.length + NEW_PRODUCTS.length}`)
 
-  // 4) Cities
+  // 4) Cities (+ руководитель, контакты-плейсхолдер, исправление названий)
   await mapLimit(CITIES, CONC, async (c, i) => {
     const doc = await payload.create({
       collection: 'cities',
@@ -199,13 +219,23 @@ export async function runSeed(payload: Payload): Promise<string[]> {
         order: i,
         code: c.code,
         isMain: !!c.isMain,
-        name: c.name.ru ?? '',
+        name: CITY_NAME_OVERRIDES[c.id]?.ru ?? c.name.ru ?? '',
         region: c.region.ru ?? '',
+        ...cityBranchData(c.id, 'ru', !!c.isMain),
         ...(CITY_COORDS[c.id] ?? {}),
       },
     })
     for (const lang of ['ky', 'en'] as const) {
-      await payload.update({ collection: 'cities', id: doc.id, locale: lang, data: { name: c.name[lang] ?? '', region: c.region[lang] ?? '' } })
+      await payload.update({
+        collection: 'cities',
+        id: doc.id,
+        locale: lang,
+        data: {
+          name: CITY_NAME_OVERRIDES[c.id]?.[lang] ?? c.name[lang] ?? '',
+          region: c.region[lang] ?? '',
+          ...cityBranchData(c.id, lang, !!c.isMain),
+        },
+      })
     }
   })
   info(`📍 Cities: ${CITIES.length}`)
@@ -302,5 +332,54 @@ export async function runSeed(payload: Payload): Promise<string[]> {
   info('⚙️ Globals: stats, calculator')
 
   info('✅ Seed завершён')
+  return log
+}
+
+/**
+ * Точечное (НЕразрушающее) обновление филиалов: руководитель, контакты-плейсхолдер
+ * и исправление названий-плейсхолдеров — БЕЗ удаления/пересоздания других коллекций.
+ * Обновляет уже существующие города по cityId. Идемпотентно.
+ * Вызывается из /api/seed?mode=branches (когда полный пересев нежелателен).
+ */
+export async function seedBranches(payload: Payload): Promise<string[]> {
+  const log: string[] = []
+  const info = (m: string) => {
+    payload.logger.info(m)
+    log.push(m)
+  }
+  info('🌱 Seed branches: старт (точечно, без пересева)')
+
+  const res = await payload.find({ collection: 'cities', locale: 'ru', limit: 100, depth: 0, pagination: false })
+  await mapLimit(res.docs, CONC, async (doc) => {
+    const cityId = String(doc.cityId)
+    const isMain = !!doc.isMain
+    const nameOverride = CITY_NAME_OVERRIDES[cityId]
+
+    await payload.update({
+      collection: 'cities',
+      id: doc.id,
+      locale: 'ru',
+      data: {
+        // имя трогаем ТОЛЬКО при наличии override (иначе затёрли бы существующее)
+        ...(nameOverride ? { name: nameOverride.ru } : {}),
+        ...cityBranchData(cityId, 'ru', isMain),
+      },
+    })
+    for (const lang of ['ky', 'en'] as const) {
+      await payload.update({
+        collection: 'cities',
+        id: doc.id,
+        locale: lang,
+        data: {
+          ...(nameOverride ? { name: nameOverride[lang] } : {}),
+          ...cityBranchData(cityId, lang, isMain),
+        },
+      })
+    }
+    const dir = CITY_DIRECTORS[cityId]
+    info(`📍 ${cityId}${dir ? ' · ' + dir : ''}${nameOverride ? ' · → ' + nameOverride.ru : ''}`)
+  })
+
+  info('✅ Seed branches завершён')
   return log
 }

@@ -105,6 +105,7 @@ export interface CityView {
 	isMain: boolean
 	name: Record<Lang, string>
 	region: Record<Lang, string>
+	director: Record<Lang, string>
 	address: Record<Lang, string>
 	hours: Record<Lang, string>
 	phone: string
