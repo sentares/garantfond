@@ -54,7 +54,7 @@
 **Env на Vercel:**
 - `DATABASE_URL` — **POOLED** строка Neon-ветки `production` (хост с `-pooler`!). Прямую строку (как в dev `.env`) на Vercel НЕЛЬЗЯ (исчерпает коннекты в serverless).
 - `PAYLOAD_SECRET` — **тот же**, что в dev (БД-ветка — копия, иначе рассинхрон JWT/шифрования; админ-логин на bcrypt не зависит от секрета, но безопаснее тот же).
-- `BLOB_READ_WRITE_TOKEN` — из созданного в Vercel Blob store.
+- `BLOB_READ_WRITE_TOKEN` — из созданного в Vercel Blob store. **ГРАБЛЯ:** авто-привязка Blob к проекту добавляет `BLOB_STORE_ID` + `BLOB_WEBHOOK_PUBLIC_KEY`, но НЕ всегда `BLOB_READ_WRITE_TOKEN`. Его надо добавить ВРУЧНУЮ: Storage→стор→`.env.local`/Quickstart (или Tokens→Read-write), значение `vercel_blob_rw_…` → Settings→Env Vars. Без него плагин выключен (`enabled: Boolean(token)`) → Payload пишет на локальный диск → `ENOENT mkdir 'media'` (ФС Vercel read-only). После добавления — Redeploy.
 
 **Шаги (дашборды):** 1) Neon → создать ветку `production`, скопировать pooled-строку. 2) Vercel → New Project → импорт репо `sentares/garantfond` → задать 3 env → Deploy. 3) Vercel → Storage → создать Blob store, привязать к проекту (env `BLOB_READ_WRITE_TOKEN` подставится). 4) Редеплой. 5) Смоук-тест: `/admin` (вход), главная, отправка заявки.
 
