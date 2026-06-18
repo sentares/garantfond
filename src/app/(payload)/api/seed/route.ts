@@ -4,7 +4,9 @@ import { runSeed, seedBranches } from '@/seed-core'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
-export const maxDuration = 800
+// Vercel Hobby ограничивает maxDuration ≤ 300с. На проде роут всё равно закрыт (404),
+// а полный сид (~5–7 мин) идёт не через Vercel, а локально / через Neon-ветку.
+export const maxDuration = 300
 
 // Защита от параллельного запуска (если клиент отвалился по таймауту и повторил запрос)
 let seeding = false
